@@ -6,8 +6,6 @@ import java.util.Arrays;
 public class TicTakToe {
     ArrayList <Position> start = new ArrayList<>();
     ArrayList <Position> finish = new ArrayList<>();
-    public final char X = 'x';
-    public final char O = 'o';
     private int maxX = 0;
     private int maxO = 0;
 
@@ -40,20 +38,24 @@ public class TicTakToe {
     }
 
     public void cleanCell(int x, int y) { //очистка клетки
-        field[y][x] = Field.EmptyCell;
-
+        if(inside(x, y)) {
+            field[y][x] = Field.EmptyCell;
+        }
+        else throw new IllegalArgumentException("Клетка находится вне поля");
     }
 
-    public void turnPlayer1(int x, int y) {//Добавление крестика
+    public void crossX(int x, int y) {//Добавление крестика
         if(inside(x,y)) {
             field[y][x] = Field.X;
         }
+        else throw new IllegalArgumentException("Клетка находится вне поля");
     }
 
-    public void turnPlayer2(int x, int y) { //Добавление нолика
+    public void crossO(int x, int y) { //Добавление нолика
         if(inside(x,y)) {
             field[y][x] = Field.O;
         }
+        else throw new IllegalArgumentException("Клетка находится вне поля");
     }
 
     private boolean inside(int x, int y) { //Проверка на присутствие координат ячейки внутри поля
@@ -75,6 +77,8 @@ public class TicTakToe {
     }
 
     private void dio(Direction direction, Field symbols, boolean up) { //проверка диагоналей на макс. последовательность
+        ArrayList <Position> start = new ArrayList<>();
+        ArrayList <Position> finish = new ArrayList<>();
         int currentMax = 0;
         int startI = 0;
         int startJ = 0;
@@ -178,22 +182,22 @@ public class TicTakToe {
             currentMax = 0;
         }
     }
-    public void maxLength(Field symbols) { //запускает методы на нахождение макс.длины
-        if (symbols == Field.X) {
-         maxX = 0;
-        }
-        else maxO= 0;
+
+    public int maxX(Field symbols) {
+        maxX = 0;
         horVer(Direction.hor, symbols);
         horVer(Direction.ver, symbols);
         dio(Direction.dioL, symbols, true);
         dio(Direction.dioR, symbols, true);
-    }
-
-    public int maxX() {
         return maxX;
     }
 
-    public int maxO() {
+    public int maxO(Field symbols) {
+        maxO= 0;
+        horVer(Direction.hor, symbols);
+        horVer(Direction.ver, symbols);
+        dio(Direction.dioL, symbols, true);
+        dio(Direction.dioR, symbols, true);
         return maxO;
     }
 
